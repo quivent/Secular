@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.secular.local-api</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/opt/homebrew/bin/node</string>
+        <string>/Users/joshkornreich/Documents/Projects/Secular/secular-gui/server.cjs</string>
+    </array>
+    <key>WorkingDirectory</key>
+    <string>/Users/joshkornreich/Documents/Projects/Secular/secular-gui</string>
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PORT</key>
+        <string>5288</string>
+        <key>PATH</key>
+        <string>/Users/joshkornreich/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+        <key>RAD_HOME</key>
+        <string>/Users/joshkornreich/.radicle</string>
+    </dict>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+    <key>StandardOutPath</key>
+    <string>/tmp/secular-local-api.log</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/secular-local-api-error.log</string>
+</dict>
+</plist>

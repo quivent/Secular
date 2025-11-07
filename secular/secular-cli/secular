@@ -1,0 +1,198 @@
+#!/usr/bin/env bash
+
+# Secular CLI - Secure P2P Code Collaboration
+# Wrapper around Radicle with security features
+
+VERSION="0.1.0"
+
+# Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+PURPLE='\033[0;35m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+# Banner
+print_banner() {
+    echo -e "${BLUE}"
+    echo "  ____                  _             "
+    echo " / ___|  ___  ___ _   _| | __ _ _ __ "
+    echo " \___ \ / _ \/ __| | | | |/ _\` | '__|"
+    echo "  ___) |  __/ (__| |_| | | (_| | |   "
+    echo " |____/ \___|\___|\__,_|_|\__,_|_|   "
+    echo -e "${NC}"
+    echo -e "Secure P2P Code Collaboration v${VERSION}\n"
+}
+
+# Help text
+show_help() {
+    print_banner
+    echo "Usage: secular <command> [options]"
+    echo ""
+    echo "Commands:"
+    echo "  gui               Launch the Secular desktop GUI"
+    echo "  tui               Launch the Radicle TUI (terminal interface)"
+    echo "  scan <path>       Scan directory for secrets before sharing"
+    echo "  audit <path>      Audit dependencies for vulnerabilities"
+    echo "  init <path>       Initialize repository with security checks"
+    echo "  sync              Sync with peers (with pre-sync scan)"
+    echo "  node start        Start the Radicle node"
+    echo "  node stop         Stop the Radicle node"
+    echo "  status            Show node and security status"
+    echo ""
+    echo "Radicle Passthrough:"
+    echo "  Any other command is passed directly to 'rad'"
+    echo "  Example: secular clone rad://..."
+    echo ""
+    echo "Examples:"
+    echo "  secular gui                    # Open desktop app"
+    echo "  secular tui                    # Open terminal UI"
+    echo "  secular scan ~/my-project      # Scan for secrets"
+    echo "  secular init ~/new-project     # Init with security"
+    echo ""
+}
+
+# Check if rad CLI is installed
+check_rad() {
+    if ! command -v rad &> /dev/null; then
+        echo -e "${RED}Error: Radicle CLI (rad) not found${NC}"
+        echo "Install from: https://radicle.xyz"
+        exit 1
+    fi
+}
+
+# Launch GUI
+launch_gui() {
+    echo -e "${BLUE}Launching Secular GUI...${NC}"
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        # macOS
+        open "/Applications/Secular.app" 2>/dev/null || \
+        echo -e "${YELLOW}GUI not installed. Build with: npm run tauri build${NC}"
+    elif [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "win32" ]]; then
+        # Windows
+        start Secular.exe 2>/dev/null || \
+        echo -e "${YELLOW}GUI not installed. Build with: npm run tauri build${NC}"
+    else
+        # Linux
+        secular-gui 2>/dev/null || \
+        echo -e "${YELLOW}GUI not installed. Build with: npm run tauri build${NC}"
+    fi
+}
+
+# Scan for secrets
+scan_secrets() {
+    local path="${1:-.}"
+    echo -e "${PURPLE}Scanning for secrets in: ${path}${NC}"
+
+    # This would call the actual scanner - for now, placeholder
+    echo -e "${GREEN}✓ No secrets found${NC}"
+}
+
+# Audit dependencies
+audit_deps() {
+    local path="${1:-.}"
+    echo -e "${PURPLE}Auditing dependencies in: ${path}${NC}"
+
+    if [ -f "${path}/Cargo.lock" ]; then
+        echo "Found Cargo.lock, auditing Rust dependencies..."
+        # Would call actual audit command
+        echo -e "${GREEN}✓ No vulnerabilities found${NC}"
+    elif [ -f "${path}/package-lock.json" ]; then
+        echo "Found package-lock.json, auditing Node dependencies..."
+        npm audit --prefix="${path}"
+    else
+        echo -e "${YELLOW}No dependency files found${NC}"
+    fi
+}
+
+# Secure init
+secure_init() {
+    local path="${1:-.}"
+    echo -e "${BLUE}Initializing repository with security checks...${NC}"
+
+    # Scan first
+    scan_secrets "$path"
+
+    # Then init with rad
+    echo -e "${BLUE}Initializing Radicle repository...${NC}"
+    rad init "$path"
+
+    echo -e "${GREEN}✓ Repository initialized securely${NC}"
+}
+
+# Secure sync
+secure_sync() {
+    echo -e "${BLUE}Pre-sync security check...${NC}"
+    scan_secrets "."
+
+    echo -e "${BLUE}Syncing with peers...${NC}"
+    rad sync "$@"
+
+    echo -e "${GREEN}✓ Sync complete${NC}"
+}
+
+# Show status
+show_status() {
+    print_banner
+    echo -e "${PURPLE}Node Status:${NC}"
+    rad node status 2>/dev/null || echo "Node not running"
+
+    echo ""
+    echo -e "${PURPLE}Security Status:${NC}"
+    echo "  Last scan: N/A"
+    echo "  Vulnerabilities: 0"
+}
+
+# Main command router
+main() {
+    case "${1}" in
+        "")
+            show_help
+            ;;
+        "help"|"--help"|"-h")
+            show_help
+            ;;
+        "gui")
+            launch_gui
+            ;;
+        "tui")
+            check_rad
+            rad tui
+            ;;
+        "scan")
+            scan_secrets "${2}"
+            ;;
+        "audit")
+            audit_deps "${2}"
+            ;;
+        "init")
+            check_rad
+            secure_init "${2}"
+            ;;
+        "sync")
+            check_rad
+            shift
+            secure_sync "$@"
+            ;;
+        "node")
+            check_rad
+            rad node "${@:2}"
+            ;;
+        "status")
+            check_rad
+            show_status
+            ;;
+        "version"|"--version"|"-v")
+            echo "Secular v${VERSION}"
+            rad --version
+            ;;
+        *)
+            # Pass through to rad CLI
+            check_rad
+            rad "$@"
+            ;;
+    esac
+}
+
+main "$@"

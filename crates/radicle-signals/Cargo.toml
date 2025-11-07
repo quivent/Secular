@@ -1,0 +1,14 @@
+[package]
+name = "radicle-signals"
+description = "Radicle signal handling"
+homepage.workspace = true
+repository.workspace = true
+license.workspace = true
+edition.workspace = true
+version = "0.11.0"
+rust-version.workspace = true
+
+[target.'cfg(unix)'.dependencies]
+crossbeam-channel = { workspace = true }
+libc = { workspace = true }
+signals_receipts = { version = "0.2.0", features = ["channel_notify_facility"] }

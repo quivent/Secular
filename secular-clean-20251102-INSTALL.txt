@@ -1,0 +1,112 @@
+SECULAR - INSTALLATION INSTRUCTIONS
+====================================
+
+Package: secular-clean-20251102.tar.gz (5.2MB)
+
+PREREQUISITES
+-------------
+1. Radicle CLI (rad command)
+   - Install: https://radicle.xyz/install
+   - Or: brew install radicle
+
+2. Rust toolchain (for CLI)
+   - Install: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+3. Node.js 18+ (for GUI)
+   - Install: https://nodejs.org/
+   - Or: brew install node
+
+
+INSTALLATION STEPS
+------------------
+
+1. Extract the package:
+   tar -xzf secular-clean-20251102.tar.gz
+   cd Secular
+
+2. Install the CLI (Optional):
+   cd secular-cli
+   cargo build --release
+   cargo install --path .
+   cd ..
+
+   # Test it works:
+   secular --version
+
+3. Install the GUI (Optional):
+   cd secular-gui
+   npm install
+   cd ..
+
+4. Start your Radicle node:
+   rad node start
+
+   # Check node status:
+   rad node status
+
+
+RUNNING THE APPLICATION
+------------------------
+
+Option A: Use the CLI
+   secular --help
+   secular friend list
+   secular repos list
+
+Option B: Use the GUI
+   cd secular-gui
+   npm run dev
+   # Opens at http://localhost:5173
+
+   # Or start the full stack:
+   node server.js &
+   npm run dev
+
+
+CONNECTING TO YOUR FRIEND
+--------------------------
+
+Your friend's Node ID: did:key:z6MkmVEDLxM3R58Aj4bnUpRUt8xP2WFgqtZUPseHDKcmT2tt
+Repository ID: rad:z39nmXu31EiXP123EHTZCRYtHU42C
+
+# Add your friend as a remote:
+secular friend add --name josh did:key:z6MkmVEDLxM3R58Aj4bnUpRUt8xP2WFgqtZUPseHDKcmT2tt
+
+# Clone the Secular repository from them:
+rad clone rad:z39nmXu31EiXP123EHTZCRYtHU42C --seed did:key:z6MkmVEDLxM3R58Aj4bnUpRUt8xP2WFgqtZUPseHDKcmT2tt
+
+# Or clone using the CLI:
+secular repo clone Secular --friend josh
+
+
+QUICK START
+-----------
+# If you just want to try it quickly:
+cd Secular/secular-cli
+cargo run -- --help
+
+# Or for the GUI:
+cd Secular/secular-gui
+npm install
+npm run dev
+
+
+TROUBLESHOOTING
+---------------
+- If "rad" command not found: Install Radicle CLI first
+- If "cargo" not found: Install Rust toolchain
+- If "npm" not found: Install Node.js
+- If node won't start: Check if another Radicle node is already running
+
+For more details, see:
+- README.md
+- secular-gui/QUICKSTART.md
+- secular-gui/SETUP.md
+
+
+REPOSITORY INFO
+---------------
+- Size: 5.2MB compressed, ~10MB uncompressed
+- Git history: Included (cleaned, 2.6MB)
+- Build artifacts: Excluded (regenerate with cargo build / npm install)
+- Node modules: Excluded (regenerate with npm install)

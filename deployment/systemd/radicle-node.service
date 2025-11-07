@@ -1,0 +1,48 @@
+[Unit]
+Description=Radicle Node - Secure P2P Code Collaboration
+Documentation=https://radicle.xyz/guides
+After=network.target radicle-node.socket
+Requires=radicle-node.socket
+
+[Service]
+Type=notify
+User=radicle
+Group=radicle
+
+# Environment
+Environment="RAD_HOME=/var/lib/radicle"
+Environment="RUST_LOG=info"
+Environment="RADICLE_IDLE_TIMEOUT=600"
+
+# Execution
+ExecStart=/usr/local/bin/radicle-node --listen 0.0.0.0:8776
+ExecReload=/bin/kill -HUP $MAINPID
+
+# Security hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/radicle
+
+# Resource limits (optimized for e2-micro)
+MemoryMax=800M
+MemoryHigh=600M
+CPUQuota=80%
+
+# Auto-restart on failure
+Restart=on-failure
+RestartSec=10s
+
+# Idle timeout - process will exit after 10 min idle
+# Systemd will restart via socket activation
+TimeoutStopSec=10
+KillMode=mixed
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=radicle-node
+
+[Install]
+WantedBy=multi-user.target

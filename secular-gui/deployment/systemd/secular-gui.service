@@ -1,0 +1,17 @@
+[Unit]
+Description=Secular GUI Web Server
+After=network.target
+
+[Service]
+Type=simple
+User=joshkornreich
+WorkingDirectory=/home/joshkornreich/secular-gui
+ExecStart=/usr/bin/node server.js
+Restart=always
+RestartSec=10
+Environment="PORT=3000"
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

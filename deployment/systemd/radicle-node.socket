@@ -1,0 +1,18 @@
+[Unit]
+Description=Radicle Node Socket
+Documentation=https://radicle.xyz/guides
+PartOf=radicle-node.service
+
+[Socket]
+# P2P port
+ListenStream=8776
+
+# Don't start the service immediately
+Accept=false
+
+# Socket options
+NoDelay=true
+KeepAlive=true
+
+[Install]
+WantedBy=sockets.target

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.secular.local-node</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/joshkornreich/.local/bin/radicle-node</string>
+        <string>--force</string>
+    </array>
+    <key>WorkingDirectory</key>
+    <string>/Users/joshkornreich</string>
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>RAD_HOME</key>
+        <string>/Users/joshkornreich/.radicle</string>
+    </dict>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+    <key>StandardOutPath</key>
+    <string>/tmp/secular-local-node.log</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/secular-local-node-error.log</string>
+</dict>
+</plist>
