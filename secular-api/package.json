@@ -1,0 +1,25 @@
+{
+  "name": "secular-api",
+  "version": "1.0.0",
+  "description": "Standalone API server for Secular - Secure P2P Code Collaboration",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "keywords": [
+    "secular",
+    "radicle",
+    "p2p",
+    "git",
+    "api"
+  ],
+  "author": "",
+  "license": "MIT OR Apache-2.0",
+  "dependencies": {
+    "express": "^5.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5"
+  }
+}
